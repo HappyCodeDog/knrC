@@ -1,2 +1,1 @@
-# KnR_Exercises
-# knrC
+#My solutions to <<K&R C>> exercises
