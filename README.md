@@ -4,5 +4,4 @@
 
 2018.01.16 chapter2 finished
            
-            chapter3 finished
- 
+            chapter2 finished
