@@ -1,0 +1,29 @@
+!_TAG_FILE_FORMAT	2	/extended format; --format=1 will not append ;" to lines/
+!_TAG_FILE_SORTED	1	/0=unsorted, 1=sorted, 2=foldcase/
+!_TAG_PROGRAM_AUTHOR	Darren Hiebert	/dhiebert@users.sourceforge.net/
+!_TAG_PROGRAM_NAME	Exuberant Ctags	//
+!_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
+!_TAG_PROGRAM_VERSION	5.9~svn20110310	//
+BUFSIZE	4-3.c	9;"	d	file:
+MAXOP	4-3.c	7;"	d	file:
+MAXVAL	4-3.c	6;"	d	file:
+MAXWORD	4-1.c	3;"	d	file:
+MAXWORD	4-2.c	4;"	d	file:
+NUMBER	4-3.c	8;"	d	file:
+atof	4-2.c	/^double atof(char s[])$/;"	f
+buf	4-3.c	/^char buf[BUFSIZE];$/;"	v
+bufp	4-3.c	/^int bufp = 0;$/;"	v
+getch	4-3.c	/^int getch(void)$/;"	f
+getop	4-3.c	/^int getop(char s[])$/;"	f
+isint	4-3.c	/^int isint(double n)$/;"	f
+main	4-1.c	/^main()$/;"	f
+main	4-2.c	/^main()$/;"	f
+main	4-3.c	/^main()$/;"	f
+main	test.c	/^main()$/;"	f
+pop	4-3.c	/^double pop(void)$/;"	f
+printtop	4-3.c	/^void printtop(void)$/;"	f
+push	4-3.c	/^void push(double f)$/;"	f
+sp	4-3.c	/^int sp = 0;$/;"	v
+strrindex	4-1.c	/^int strrindex(char s[], char t[])$/;"	f
+ungetch	4-3.c	/^void ungetch(int c)$/;"	f
+val	4-3.c	/^double val[MAXVAL];$/;"	v
