@@ -2,7 +2,11 @@
  *              4-4: printtop, swaptop and clearstack
  *              4-5: library functions - sin, exp, pow
  *              4-6: 26 variables with single-letter names
-                4-7: ungets(s)
+ *              4-7: ungets(s)
+ *              4-8: guarantee no more than 1 character of pushback
+ *              4-9: handle a pushed-back EOF correctly
+ *              4-10: use getline() to read an entire input line
+ *              4-11: use an internal static variable in getop
  */
 #include <stdio.h>
 #include <stdlib.h>
@@ -24,6 +28,7 @@ void push(double);
 double pop(void);
 void clearstack(void);
 void mathfunc(char s[]);
+int getline(char s[], int lim);
 
 /* reverse Polish calculator */
 main()
@@ -136,6 +141,60 @@ void clearstack(void)
     sp = 0;
 }
 
+//int i = 0;
+//char line[MAXOP];
+
+// 4-10: use getline() to read an entire input line
+int getop(char s[])
+{
+    int c;
+    // 4-11
+    static int i = 0;
+    static char line[MAXOP];
+    if (i == 0) 
+        if (getline(line, MAXOP) == 0)
+            return EOF;
+    
+    while (line[i] == ' ' || line[i] == '\t')  // skip the blanks
+        i++;
+
+    int j = 0;
+    while ((s[j] = c = line[i]) != '\n') {
+        if (islower(c)) {   // math function or command
+            while (islower(c = line[++i])) 
+                s[++j] = c;
+            
+            s[++j] = '\0';
+            if (strlen(s) > 1)  // math function
+                return NAME;
+            else 
+                return c;   // command
+        }
+        else if (!isdigit(c) && c != '.')// signed number or operator
+            if ((c == '+' || c == '-') && isdigit(line[i+1])) {
+                c = line[++i];   // is a signed number
+                s[1] = c;
+                j = 1;
+            }
+            else {
+                i++;
+                return c;   // not a number
+            }
+        if (isdigit(c))  // collect integer part
+            while (isdigit(c = line[++i])) 
+                s[++j] = c;
+        if (c == '.')   // collect fraction part
+            while (isdigit(c = line[i++])) 
+                s[++j] = c;
+            
+        s[++j] = '\0';
+        return NUMBER;
+    }
+    i = 0;  // end of this line
+    return '\n';
+}
+        
+/*
 int getop(char s[])
 {
     int i = 0, c, next = -1;
@@ -176,13 +235,14 @@ int getop(char s[])
         ungetch(c);
     return NUMBER;
 }
+*/
 
-char buf[BUFSIZE];
+int buf[BUFSIZE];
 int bufp = 0;
 
 int getch(void)
 {
-    return (bufp > 0) ? buf[--bufp] : getchar();
+    return bufp > 0 ? buf[--bufp] : getchar();
 }
 
 void ungetch(int c)
@@ -192,6 +252,32 @@ void ungetch(int c)
     else
         buf[bufp++] = c;
 }
+
+/* 4-8:
+ int buf = 0;    // because usually 0 cannot be pushed back, so we 
+                 // use 0 as sign of empty buffer
+ 
+int getch(void)
+{
+    int c;
+
+    if (buf == 0)
+        c = getchar();
+    else {
+        c = buf; 
+        buf = 0;
+    }
+    return c; 
+}
+
+void ungetch(int c)
+{
+    if (buf != 0)
+        printf("ungetch: too many characters\n");
+    else
+        buf = c;
+}
+*/
 
 void ungets(char s[])
 {
@@ -212,3 +298,16 @@ void mathfunc(char s[])
     }
 }
 
+
+int getline(char s[], int lim)
+{
+    int c, i;
+
+    i = 0; 
+    while (--lim > 0 && (c = getchar()) != EOF && c != '\n')
+        s[i++] = c;
+    if (c == '\n')
+        s[i++] = c;
+    s[i] = '\0';
+    return i;
+}
